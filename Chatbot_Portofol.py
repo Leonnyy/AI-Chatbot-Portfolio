@@ -1,30 +1,30 @@
-# chatbot_portofol.py
+# chatbot_portofol_demo.py
 import gradio as gr
 
-# API key vendoset në kompjuterin tënd si environment variable për siguri
-# import openai
-# openai.api_key = os.getenv("OPENAI_API_KEY")
+# Përgjigjet demo për portofol
+demo_pergjigje = {
+    "Cili është kryeqyteti i Francës?": "Parisi",
+    "Shpjego Teoremën e Pitagorës.": "Në një trekëndësh kënddrejtë, kuadrati i hipotenusës është i barabartë me shumën e katrorëve të kateteve.",
+    "Jep një këshillë për organizimin e kohës.": "Bëj një listë prioritetesh dhe ndaje kohën në blloqe për secilën detyrë.",
+    "Si funksionon inteligjenca artificiale?": "AI përdor modele të mësimit të makinerive për të njohur modele dhe për të dhënë përgjigje ose parashikime."
+}
 
-def chat_response(message):
+def pergjigje_chat(teksti):
     """
-    Funksion demo për Chatbot për portofol.
-    Përdor përgjigje të përgatitura për screenshot/demo.
+    Funksion demo për chatbot portofoli.
+    Merr pyetjen si string, edhe nëse vjen nga button example.
     """
-    demo_answers = {
-        "Cili është kryeqyteti i Francës?": "Parisi",
-        "Shpjego Teoremën e Pitagorës.": "Në një trekëndësh kënddrejtë, kuadrat i hipotenusës është i barabartë me shumën e katrorëve të kateteve.",
-        "Jep një këshillë për organizimin e kohës.": "Bëj një listë prioritetesh dhe ndaje kohën në blloqe për secilën detyrë.",
-        "Si funksionon inteligjenca artificiale?": "AI përdor modele të mësimit të makinerive për të njohur modele dhe për të bërë parashikime ose përgjigje."
-    }
-    
-    if not message.strip():
+    # Kontrollo nëse vjen si listë (nga Gradio example)
+    if isinstance(teksti, list):
+        teksti = teksti[0]
+
+    if not teksti.strip():
         return "Shkruaj diçka për të marrë përgjigje 😄"
     
-    # Kthe përgjigjen demo nëse pyetja ekziston
-    return demo_answers.get(message, "Ky është një demo, nuk ka përgjigje të gjallë për këtë pyetje.")
+    return demo_pergjigje.get(teksti, "Ky është një demo, nuk ka përgjigje të gjallë për këtë pyetje.")
 
-# Pyetje shembull për screenshot
-example_questions = [
+# Pyetje shembull për butona
+pyetje_shembull = [
     "Cili është kryeqyteti i Francës?",
     "Shpjego Teoremën e Pitagorës.",
     "Jep një këshillë për organizimin e kohës.",
@@ -33,13 +33,14 @@ example_questions = [
 
 # Krijimi i ndërfaqes me Gradio
 iface = gr.Interface(
-    fn=chat_response,
+    fn=pergjigje_chat,
     inputs="text",
     outputs="text",
-    title="Chatbot AI për Portofol",
+    title="Chatbot AI për Portofol (Demo)",
     description="Shkruaj çdo pyetje dhe AI do të përgjigjet! Kliko pyetjet shembull për testim të shpejtë.",
-    examples=[[q] for q in example_questions]
+    examples=[[q] for q in pyetje_shembull],  # butonat e pyetjeve shembull
+    live=True
 )
 
-# Launch me link publik për demo
+# Start interfaca
 iface.launch(share=True)
