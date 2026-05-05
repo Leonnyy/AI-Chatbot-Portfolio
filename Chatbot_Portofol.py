@@ -4,7 +4,7 @@
     outputs="text",
     title="Chatbot AI për Portofol (Demo)",
     description="Shkruaj çdo pyetje dhe AI do të përgjigjet! Kliko pyetjet shembull për testim të shpejtë.",
-    examples=[[q] for q in pyetje_shembull],  # butonat e pyetjeve shembull
+    examples=[[q] for q in pyetje_shembull],
     live=True
 )
 
@@ -35,7 +35,7 @@ def pergjigje_chat(mesazhi, histori):
     if histori is None:
         histori = []
 
-    # Ndërto kontekstin për OpenAI
+   
     messages = [SYSTEM_PROMPT] + list(histori) + [{"role": "user", "content": mesazhi}]
 
     try:
@@ -49,7 +49,7 @@ def pergjigje_chat(mesazhi, histori):
     except Exception as e:
         reply = f"❌ Gabim: {str(e)}"
 
-    # Shto në histori si DICT (jo tuple!)
+    
     histori = histori + [
         {"role": "user", "content": mesazhi},
         {"role": "assistant", "content": reply},
@@ -81,7 +81,7 @@ def pastro():
     return [], ""
 
 
-# CSS profesional
+
 custom_css = """
 .gradio-container {
     max-width: 900px !important;
@@ -156,7 +156,7 @@ with gr.Blocks(title="🤖 Chatbot AI") as demo:
         </div>
     """)
 
-    # State për historinë (listë dict-esh)
+   
     state = gr.State([])
 
     chatbot = gr.Chatbot(
@@ -186,7 +186,7 @@ with gr.Blocks(title="🤖 Chatbot AI") as demo:
 
     clear = gr.Button("🧹 Pastro bisedën", elem_id="clear-btn")
 
-    # Funksioni që sinkronizon state-in me chatbot-in
+ 
     def chat_handler(mesazhi, histori_state):
         histori_e_re, txt_bosh = pergjigje_chat(mesazhi, histori_state)
         return histori_e_re, histori_e_re, txt_bosh
@@ -194,7 +194,7 @@ with gr.Blocks(title="🤖 Chatbot AI") as demo:
     def clear_handler():
         return [], [], ""
 
-    # EVENTS — chatbot merr listë dict-esh nga state
+ 
     btn.click(chat_handler, [txt, state], [state, chatbot, txt])
     txt.submit(chat_handler, [txt, state], [state, chatbot, txt])
     audio.change(voice_to_text, audio, txt)
